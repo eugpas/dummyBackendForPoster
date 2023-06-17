@@ -40,4 +40,13 @@ app.post('/posts', async (req, res) => {
   res.status(201).json({ message: 'Stored new post.', post: newPost });
 });
 
+app.post('/posts/delete/:id', async (req, res) => {
+  const existingPosts = await getStoredPosts();
+  const updatedPosts = existingPosts.filter(post => {
+    return post.id !== req.body.id;
+  });
+  await storePosts(updatedPosts);
+  res.status(200).json({ message: 'The post has been successfully deleted.', id: req.body.id });
+});
+
 app.listen(8080);
